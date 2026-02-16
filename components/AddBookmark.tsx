@@ -22,17 +22,32 @@ export function AddBookmark() {
     }
 
     return (
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-secondary/30">
-            <CardContent className="pt-6">
-                <form ref={formRef} action={clientAction} className="flex flex-col gap-4">
-                    <h3 className="font-semibold text-lg">Add New Bookmark</h3>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                        <Input name="title" placeholder="Title" required className="flex-1" />
-                        <Input name="url" placeholder="https://example.com" type="url" required className="flex-[2]" />
-                        <Button type="submit" size="icon" className="shrink-0">
-                            <Plus className="w-5 h-5" />
-                        </Button>
+        <Card className="border border-gray-200 shadow-sm bg-white rounded-xl overflow-hidden">
+            <CardContent className="p-2 sm:p-3">
+                <form ref={formRef} action={clientAction} className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex-1">
+                        <Input
+                            id="title"
+                            name="title"
+                            placeholder="Title"
+                            required
+                            className="h-12 bg-gray-50 border-transparent focus:bg-white focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10 transition-all rounded-lg font-medium"
+                        />
                     </div>
+                    <div className="flex-[2]">
+                        <Input
+                            id="url"
+                            name="url"
+                            placeholder="https://example.com"
+                            type="url"
+                            required
+                            className="h-12 bg-gray-50 border-transparent focus:bg-white focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10 transition-all rounded-lg font-medium"
+                        />
+                    </div>
+                    <Button type="submit" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-sm transition-all hover:shadow hover:scale-[1.02]">
+                        <Plus className="w-5 h-5 mr-2" />
+                        <span>Add</span>
+                    </Button>
                 </form>
             </CardContent>
         </Card>

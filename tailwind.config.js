@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+// Force Rebuild
 module.exports = {
     content: [
         "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -56,5 +57,5 @@ module.exports = {
             },
         },
     },
-    plugins: [],
+    plugins: [require("tailwindcss-animate")],
 };

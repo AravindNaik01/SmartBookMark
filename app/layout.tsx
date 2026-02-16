@@ -1,14 +1,15 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'sonner'
 import { Header } from '@/components/Header'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
 
 export const metadata: Metadata = {
-  title: 'Smart Bookmark App',
-  description: 'Manage your bookmarks with ease.',
+  title: 'Markly',
+  description: 'Save and organize your favorite links.',
 }
 
 export default function RootLayout({
@@ -18,11 +19,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.variable} ${playfair.variable} font-sans bg-gray-50`}>
         <div className="min-h-screen flex flex-col">
-          {/* We will implement Header logic inside Header component (client/server split) */}
           <Header />
-          <main className="flex-1 container mx-auto py-8">
+          <main className="flex-1 container mx-auto py-12 px-4 max-w-4xl">
             {children}
           </main>
         </div>

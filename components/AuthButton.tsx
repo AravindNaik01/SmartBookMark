@@ -4,7 +4,13 @@ import { Button } from "@/components/ui/button"
 import { createClient } from "@/utils/supabase/client"
 import { useRouter } from "next/navigation"
 
-export function AuthButton({ user }: { user: any }) {
+interface AuthButtonProps {
+    user: any;
+    className?: string;
+    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+}
+
+export function AuthButton({ user, className, variant = "outline" }: AuthButtonProps) {
     const router = useRouter()
     const supabase = createClient()
 
@@ -13,6 +19,10 @@ export function AuthButton({ user }: { user: any }) {
             provider: 'google',
             options: {
                 redirectTo: `${location.origin}/auth/callback`,
+                queryParams: {
+                    access_type: 'offline',
+                    prompt: 'consent',
+                },
             },
         })
     }
@@ -23,14 +33,9 @@ export function AuthButton({ user }: { user: any }) {
     }
 
     return user ? (
-        <div className="flex items-center gap-4">
-            <span className="text-sm font-medium hidden sm:inline-block">
-                {user.email}
-            </span>
-            <Button variant="outline" onClick={handleLogout}>
-                Sign Out
-            </Button>
-        </div>
+        <Button variant={variant} onClick={handleLogout} className={className}>
+            Sign Out <span className="ml-2 opacity-50 text-[10px]">→</span>
+        </Button>
     ) : (
         <Button onClick={handleLogin}>
             Sign In with Google
