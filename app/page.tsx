@@ -1,65 +1,62 @@
-import Image from "next/image";
+import { createClient } from '@/utils/supabase/server'
+import { BookmarkList } from '@/components/BookmarkList'
+import { AddBookmark } from '@/components/AddBookmark'
 
-export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+export default async function Home() {
+  const supabase = await createClient()
+
+  // Gracefully handle missing env vars or connection errors for initial render
+  let user = null
+  let bookmarks = []
+
+  try {
+    const { data: { user: u } } = await supabase.auth.getUser()
+    user = u
+
+    if (user) {
+      const { data: b } = await supabase
+        .from('bookmarks')
+        .select('*')
+        .order('created_at', { ascending: false })
+      bookmarks = b || []
+    }
+  } catch (e) {
+    console.error("Supabase connection error:", e)
+  }
+
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 text-center px-4">
+        <div className="space-y-4">
+          <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+            SmartMark
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-xl text-muted-foreground max-w-[600px] leading-relaxed">
+            The professional way to manage your links. <br />
+            Secure, Real-time, and Beautiful.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        {/* The Header AuthButton handles login interaction */}
+        <div className="p-4 rounded-lg bg-card border shadow-sm text-sm text-muted-foreground">
+          <p>Sign in with Google to start bookmarking.</p>
         </div>
-      </main>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-10">
+      <section className="max-w-2xl mx-auto">
+        <AddBookmark />
+      </section>
+
+      <section>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold tracking-tight">Your Bookmarks</h2>
+          <span className="text-sm text-muted-foreground">{bookmarks.length} saved</span>
+        </div>
+        <BookmarkList initialBookmarks={bookmarks} />
+      </section>
     </div>
-  );
+  )
 }
