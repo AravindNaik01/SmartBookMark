@@ -51,4 +51,30 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .animate-gradient-x {
+    animation: gradient-x 8s ease infinite;
+    background-size: 200% auto;
+  }
+
+  @keyframes gradient-x {
+
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .scroll-stack-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scroll-stack-container::-webkit-scrollbar {
+    display: none;
+  }
 }

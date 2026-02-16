@@ -2,12 +2,13 @@
 
 import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { useCallback, useState, useEffect } from "react"
 
 export function SearchBar() {
     const router = useRouter()
     const searchParams = useSearchParams()
+    const pathname = usePathname()
     const [value, setValue] = useState(searchParams.get('q') || "")
 
     // Update local state immediately
@@ -24,8 +25,8 @@ export function SearchBar() {
         } else {
             params.delete('q')
         }
-        router.replace(`/?${params.toString()}`)
-    }, [searchParams, router])
+        router.replace(`${pathname}?${params.toString()}`)
+    }, [searchParams, router, pathname])
 
     return (
         <div className="relative w-full max-w-md hidden md:block">

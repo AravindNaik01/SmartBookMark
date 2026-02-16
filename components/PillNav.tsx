@@ -7,7 +7,7 @@ import { SearchBar } from './SearchBar';
 import { Bookmark } from 'lucide-react';
 import { User } from '@supabase/supabase-js';
 import { createClient } from "@/utils/supabase/client"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 
 export type PillNavItem = {
     label: string;
@@ -36,6 +36,7 @@ const PillNav: React.FC<PillNavProps> = ({
 
     const supabase = createClient()
     const router = useRouter()
+    const pathname = usePathname()
 
     // Default color settings
     const baseColor = '#000';
@@ -43,6 +44,8 @@ const PillNav: React.FC<PillNavProps> = ({
     const hoveredPillTextColor = '#fff';
     const pillTextColor = '#000';
     const ease = 'power3.easeOut';
+
+    const showSearchBar = user && pathname !== '/';
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
@@ -63,12 +66,18 @@ const PillNav: React.FC<PillNavProps> = ({
     };
 
     // Combine items with Auth item, memoized to prevent re-renders
-    const navItems = React.useMemo(() => [
-        ...items,
-        user
-            ? { label: 'Sign Out', onClick: handleLogout, href: '#' }
-            : { label: 'Sign In', onClick: handleLogin, href: '#' }
-    ], [items, user]);
+    const navItems = React.useMemo(() => {
+        const baseItems = [
+            ...items,
+            user
+                ? { label: 'Sign Out', onClick: handleLogout, href: '#' }
+                : { label: 'Sign In', onClick: handleLogin, href: '#' }
+        ];
+
+        // Filter out the item if its href matches the current pathname
+        // Except for logout/login which have href='#'
+        return baseItems.filter(item => item.href !== pathname || item.href === '#');
+    }, [items, user, pathname]);
 
     useEffect(() => {
         const layout = () => {
@@ -175,9 +184,8 @@ const PillNav: React.FC<PillNavProps> = ({
                 className="flex items-center justify-between w-full"
                 style={cssVars}
             >
-                {/* Left: Logo & Search */}
-                <div className="flex items-center gap-4 flex-1">
-                    {/* Logo Pill */}
+                {/* Left: Logo */}
+                <div className="flex-1 flex items-center">
                     <Link
                         href="/"
                         ref={logoRef}
@@ -190,20 +198,20 @@ const PillNav: React.FC<PillNavProps> = ({
                     >
                         <Bookmark className="w-5 h-5 text-white fill-current" />
                     </Link>
+                </div>
 
-                    {/* Search Bar - Integrated nicely */}
+                {/* Center: Search Bar */}
+                <div className="hidden md:flex flex-1 justify-center items-center">
                     <div className="w-full max-w-sm">
-                        <SearchBar />
+                        {showSearchBar && <SearchBar />}
                     </div>
                 </div>
 
                 {/* Right: User Auth & Menu */}
-                <div className="flex items-center gap-4">
-
-                    {/* Pill Navigation Items (e.g. Links) */}
+                <div className="flex-1 flex items-center justify-end">
                     <div
                         ref={navItemsRef}
-                        className="relative items-center rounded-full hidden md:flex"
+                        className="relative items-center rounded-full flex"
                         style={{
                             height: 'var(--nav-h)',
                             background: 'var(--base, #000)'

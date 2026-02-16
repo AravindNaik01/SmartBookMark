@@ -10,14 +10,13 @@ export async function Header() {
     const { data: { user } } = await supabase.auth.getUser()
 
     return (
-        <header className="w-full bg-white border-b border-gray-100 py-4">
-            <div className="container mx-auto px-4 max-w-5xl">
+        <header className="w-full bg-white/80 backdrop-blur-md border-b border-gray-100 py-2 sticky top-0 z-[100]">
+            <div className="container mx-auto px-4 max-w-7xl">
                 <PillNav
                     user={user}
                     items={[
                         { label: 'Home', href: '/' },
-                        // Added dummy items just to show off the pill effect as requested
-                        { label: 'About', href: '#' },
+                        ...(user ? [{ label: 'Dashboard', href: '/dashboard' }] : []),
                     ]}
                 />
             </div>
