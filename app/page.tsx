@@ -100,17 +100,17 @@ export default async function Home() {
         <ScrollStackItem itemClassName="bg-gradient-to-br from-indigo-600 to-violet-700 text-white border-none shadow-2xl">
           <div className="flex flex-col gap-4 h-full justify-center text-center">
             <h2 className="text-4xl font-bold font-serif text-white mb-4">How it works</h2>
-            <div className="flex flex-col md:flex-row justify-center items-center gap-8 text-indigo-100 font-medium text-lg">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-indigo-100 font-medium text-lg">
               <div className="flex flex-col items-center gap-2">
                 <span className="text-3xl">1</span>
                 <span>Capture</span>
               </div>
-              <div className="h-12 w-px bg-white/20"></div>
+              <div className="h-8 md:h-12 w-px bg-white/20"></div>
               <div className="flex flex-col items-center gap-2">
                 <span className="text-3xl">2</span>
                 <span>Curate</span>
               </div>
-              <div className="h-12 w-px bg-white/20"></div>
+              <div className="h-8 md:h-12 w-px bg-white/20"></div>
               <div className="flex flex-col items-center gap-2">
                 <span className="text-3xl">3</span>
                 <span>Rediscover</span>
