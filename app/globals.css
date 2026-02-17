@@ -69,12 +69,23 @@
     }
   }
 
-  .scroll-stack-container {
+  .scroll-stack-container,
+  .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
 
-  .scroll-stack-container::-webkit-scrollbar {
+  .scroll-stack-container::-webkit-scrollbar,
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
 }

@@ -21,15 +21,15 @@ export default async function Home() {
         <ScrollStackItem itemClassName="!bg-transparent !shadow-none !border-none !p-0 !h-auto !my-0">
           <div className="container mx-auto px-4 flex flex-col items-center text-center pt-0 min-h-[calc(100vh-100px)] relative">
             <div className="flex flex-col items-center gap-4 w-full max-w-none py-12">
-              <h1 className="whitespace-nowrap text-6xl md:text-[8rem] font-bold font-serif text-gray-900 tracking-tighter leading-tight">
+              <h1 className="whitespace-nowrap text-4xl sm:text-6xl md:text-[8rem] font-bold font-serif text-gray-900 tracking-tighter leading-tight">
                 Bookmark the web,
               </h1>
-              <h1 className="whitespace-nowrap text-6xl md:text-[8rem] font-bold font-serif tracking-tighter leading-tight mb-8 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-[length:200%_auto] animate-gradient-x animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 py-2">
+              <h1 className="whitespace-nowrap text-4xl sm:text-6xl md:text-[8rem] font-bold font-serif tracking-tighter leading-tight mb-8 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-[length:200%_auto] animate-gradient-x animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 py-2">
                 intelligent & simple.
               </h1>
             </div>
 
-            <p className="max-w-3xl text-2xl md:text-3xl text-gray-500 mb-12 leading-tight font-light tracking-tight animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+            <p className="max-w-3xl text-xl md:text-3xl text-gray-500 mb-12 leading-tight font-light tracking-tight animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
               Markly transforms how you save and organize links. <br className="hidden md:block" />
               A distraction-free experience built for pure speed.
             </p>
@@ -100,7 +100,7 @@ export default async function Home() {
         <ScrollStackItem itemClassName="bg-gradient-to-br from-indigo-600 to-violet-700 text-white border-none shadow-2xl">
           <div className="flex flex-col gap-4 h-full justify-center text-center">
             <h2 className="text-4xl font-bold font-serif text-white mb-4">How it works</h2>
-            <div className="flex justify-center gap-8 text-indigo-100 font-medium text-lg">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-8 text-indigo-100 font-medium text-lg">
               <div className="flex flex-col items-center gap-2">
                 <span className="text-3xl">1</span>
                 <span>Capture</span>

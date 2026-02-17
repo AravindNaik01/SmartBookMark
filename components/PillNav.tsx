@@ -211,13 +211,13 @@ const PillNav: React.FC<PillNavProps> = ({
                 <div className="flex-1 flex items-center justify-end">
                     <div
                         ref={navItemsRef}
-                        className="relative items-center rounded-full flex"
+                        className="relative items-center rounded-full flex max-w-full"
                         style={{
                             height: 'var(--nav-h)',
                             background: 'var(--base, #000)'
                         }}
                     >
-                        <ul className="list-none flex items-stretch m-0 p-[3px] h-full" style={{ gap: 'var(--pill-gap)' }}>
+                        <ul className="list-none flex items-stretch m-0 p-[3px] h-full overflow-x-auto no-scrollbar mask-image-linear-to-r" style={{ gap: 'var(--pill-gap)' }}>
                             {navItems.map((item, i) => (
                                 <li key={i} className="flex h-full">
                                     {/* Use button if onClick is present, Link otherwise */}
