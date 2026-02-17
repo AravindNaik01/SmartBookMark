@@ -6,7 +6,9 @@ create table if not exists public.bookmarks (
   url text not null,
   created_at timestamp with time zone not null default now(),
   constraint bookmarks_pkey primary key (id),
-  constraint bookmarks_user_id_fkey foreign key (user_id) references auth.users (id) on delete cascade
+  constraint bookmarks_user_id_fkey foreign key (user_id) references auth.users (id) on delete cascade,
+  constraint unique_user_bookmark_url unique (user_id, url),
+  constraint unique_user_bookmark_title unique (user_id, title)
 );
 
 -- Enable RLS

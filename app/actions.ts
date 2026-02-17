@@ -35,6 +35,9 @@ export async function addBookmark(formData: FormData) {
         })
 
     if (error) {
+        if (error.code === '23505') {
+            return { error: 'You have already saved a bookmark with this title or URL.' }
+        }
         return { error: error.message }
     }
 
