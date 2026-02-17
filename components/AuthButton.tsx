@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/utils/supabase/client"
+import next from "next";
 import { useRouter } from "next/navigation"
 
 interface AuthButtonProps {

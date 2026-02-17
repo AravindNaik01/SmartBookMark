@@ -23,7 +23,7 @@ export async function addBookmark(formData: FormData) {
     const parsed = bookmarkSchema.safeParse({ title, url })
 
     if (!parsed.success) {
-        return { error: parsed.error.errors[0].message }
+        return { error: parsed.error.issues[0].message }
     }
 
     const { error } = await supabase

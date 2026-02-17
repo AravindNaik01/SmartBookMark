@@ -33,7 +33,7 @@ export default async function Dashboard() {
 
                 <div className="max-w-5xl mx-auto">
                     <Suspense fallback={<div>Loading...</div>}>
-                        <BookmarkList initialBookmarks={bookmarks || []} />
+                        <BookmarkList initialBookmarks={bookmarks || []} userId={user.id} />
                     </Suspense>
                 </div>
             </div>

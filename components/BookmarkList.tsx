@@ -9,7 +9,7 @@ import { Trash2, ExternalLink, Globe, Bookmark, Search } from 'lucide-react'
 import { deleteBookmark } from '@/app/actions'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 interface Bookmark {
     id: string
@@ -19,9 +19,10 @@ interface Bookmark {
     created_at: string
 }
 
-export function BookmarkList({ initialBookmarks }: { initialBookmarks: Bookmark[] }) {
+export function BookmarkList({ initialBookmarks, userId }: { initialBookmarks: Bookmark[], userId: string }) {
     const [bookmarks, setBookmarks] = useState<Bookmark[]>(initialBookmarks)
     const searchParams = useSearchParams()
+    const router = useRouter()
     const searchQuery = searchParams.get('q') || ""
     const supabase = createClient()
 
@@ -31,23 +32,38 @@ export function BookmarkList({ initialBookmarks }: { initialBookmarks: Bookmark[
 
     useEffect(() => {
         const channel = supabase
-            .channel('realtime bookmarks')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'bookmarks' }, (payload) => {
-                if (payload.eventType === 'INSERT') {
-                    setBookmarks((prev) => {
-                        if (prev.find(b => b.id === payload.new.id)) return prev
-                        return [payload.new as Bookmark, ...prev]
-                    })
-                } else if (payload.eventType === 'DELETE') {
-                    setBookmarks((prev) => prev.filter((b) => b.id !== payload.old.id))
+            .channel(`user-bookmarks-${userId}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'bookmarks',
+                },
+                (payload) => {
+                    console.log('Realtime event received:', payload)
+                    if (payload.eventType === 'INSERT') {
+                        const newBookmark = payload.new as Bookmark
+                        setBookmarks((prev) => {
+                            if (prev.find(b => b.id === newBookmark.id)) return prev
+                            return [newBookmark, ...prev]
+                        })
+                        router.refresh()
+                    } else if (payload.eventType === 'DELETE') {
+                        setBookmarks((prev) => prev.filter((b) => b.id !== payload.old.id))
+                        router.refresh()
+                    }
                 }
+            )
+            .subscribe((status) => {
+                console.log('Realtime status:', status)
             })
-            .subscribe()
 
         return () => {
+            console.log('Cleaning up subscription')
             supabase.removeChannel(channel)
         }
-    }, [supabase])
+    }, [supabase, router, userId])
 
     const handleDelete = async (id: string) => {
         const previous = bookmarks
@@ -59,6 +75,7 @@ export function BookmarkList({ initialBookmarks }: { initialBookmarks: Bookmark[
             toast.error(result.error)
         } else {
             toast.success("Bookmark deleted")
+            router.refresh()
         }
     }
 
@@ -112,9 +129,18 @@ export function BookmarkList({ initialBookmarks }: { initialBookmarks: Bookmark[
                                         <h3 className="text-base font-bold text-gray-900 truncate" title={bookmark.title}>
                                             {bookmark.title}
                                         </h3>
-                                        <p className="text-sm text-gray-500 truncate font-medium">
-                                            {new URL(bookmark.url).hostname}
-                                        </p>
+                                        <div className="flex items-center gap-2 mt-0.5">
+                                            <p className="text-xs text-gray-400 truncate font-medium">
+                                                {new URL(bookmark.url).hostname}
+                                            </p>
+                                            <span className="text-[10px] text-gray-300">•</span>
+                                            <p
+                                                className="text-xs text-gray-400 whitespace-nowrap"
+                                                suppressHydrationWarning={true}
+                                            >
+                                                {formatRelativeTime(bookmark.created_at)}
+                                            </p>
+                                        </div>
                                     </a>
                                 </div>
 
@@ -142,4 +168,21 @@ export function BookmarkList({ initialBookmarks }: { initialBookmarks: Bookmark[
             </div>
         </div>
     )
+}
+
+function formatRelativeTime(dateString: string) {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
+
+    if (diffInSeconds < 60) return 'Just now'
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`
+    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`
+
+    return date.toLocaleDateString(undefined, {
+        month: 'short',
+        day: 'numeric',
+        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+    })
 }
