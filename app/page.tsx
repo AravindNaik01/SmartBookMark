@@ -21,7 +21,7 @@ export default async function Home() {
         <ScrollStackItem itemClassName="!bg-transparent !shadow-none !border-none !p-0 !h-auto !my-0">
           <div className="container mx-auto px-4 flex flex-col items-center text-center pt-0 min-h-[calc(100vh-100px)] relative">
             <div className="flex flex-col items-center gap-4 w-full max-w-none py-12">
-              <h1 className="whitespace-nowrap text-6xl md:text-[8rem] font-bold font-serif text-gray-900 tracking-tighter leading-tight animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100">
+              <h1 className="whitespace-nowrap text-6xl md:text-[8rem] font-bold font-serif text-gray-900 tracking-tighter leading-tight">
                 Bookmark the web,
               </h1>
               <h1 className="whitespace-nowrap text-6xl md:text-[8rem] font-bold font-serif tracking-tighter leading-tight mb-8 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-[length:200%_auto] animate-gradient-x animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 py-2">

@@ -5,8 +5,8 @@ import { Toaster } from 'sonner'
 import { Header } from '@/components/Header'
 import { LoginResultHandler } from '@/components/LoginResultHandler'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
-const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair', display: 'swap' })
 
 export const metadata: Metadata = {
   title: 'Markly',
