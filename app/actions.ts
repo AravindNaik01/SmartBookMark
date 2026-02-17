@@ -5,8 +5,10 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
 const bookmarkSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    url: z.string().url("Must be a valid URL"),
+    title: z.string().trim().min(1, "Title is required"),
+    url: z.string().trim().url("Must be a valid URL").refine((val) => val.startsWith('http://') || val.startsWith('https://'), {
+        message: "URL must start with http:// or https://"
+    }),
 })
 
 export async function addBookmark(formData: FormData) {
